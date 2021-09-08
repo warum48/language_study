@@ -1,0 +1,27 @@
+body {
+  background: #cb184e;
+  background: -webkit-linear-gradient(top left, #cb184e, #171141);
+  background: -moz-linear-gradient(top left, #cb184e, #171141);
+  background: linear-gradient(to bottom right, #cb184e, #171141);
+}
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+h1 {
+  color: white;
+}
+table {
+  border-spacing: 1em;
+  margin: 1rem auto;
+}
+td {
+  padding: 1rem 1.2rem;
+  border-radius: 6px;
+  border: 1px solid red;
+  background-color: white;
+}
+
+td.active {
+  background-color: lightpink;
+}
