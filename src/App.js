@@ -31,7 +31,7 @@ export default function App() {
   const [counterLang, setCounterLang] = useState(0);
   //const [value, setValue] = useState("test speach");
   const { speak } = useSpeechSynthesis();
-  const [data, setData] = useState(null);
+  const [data, setData] = useState(null); //mod
   const data_ = [
     {
       en: "Unless",
