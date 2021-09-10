@@ -4,11 +4,15 @@ import Speech from "react-speech";
 import Say from "react-say";
 import SayButton from "react-say";
 import { useSpeechSynthesis } from "react-speech-kit";
+import useStateWithCallback from "use-state-with-callback";
+import { useToggle } from "react-use";
+import { useSelector, useDispatch } from "react-redux";
+import { decrement, increment, incrementByAmount } from "./redux/counter";
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
 
-  // Remember the latest callback..
+  // Remember the latest callback...
   useEffect(() => {
     savedCallback.current = callback;
   }, [callback]);
@@ -23,62 +27,56 @@ function useInterval(callback, delay) {
 }
 
 export default function App() {
+  //const count= useSelector((state) => state.counter.counter); //test redux
+  const { count } = useSelector((state) => state.counter);
+  const dispatch = useDispatch();
   /*const selector = useCallback(
     (voices) => [...voices].find((v) => v.lang === "zh-HK"),
     []
   );*/
   const [counter, setCounter] = useState(0);
-  const [counterLang, setCounterLang] = useState(0);
+  //const [counterLang, setCounterLang] = useState(0);
   //const [value, setValue] = useState("test speach");
   const { speak } = useSpeechSynthesis();
+  const [toggleExpandHelp, setToggleExpandHelp] = useToggle();
   const [data, setData] = useState(null); //mod
-  const data_ = [
-    {
-      en: "Unless",
-      ru: "Пока не"
-    },
-    {
-      en: "shallow",
-      ru: "мелкий"
-    },
-    {
-      en: "caveat",
-      ru: "предостережение"
-    },
-    {
+
+  const [counterLang, setCounterLang] = useStateWithCallback(
+    0,
+    (counterLang) => {
+      if (data) {
+        if (counterLang == 0) {
+          //speak({ text: data[counter].en, lang: "ru-RU" });
+        } else {
+          /*speak({
+            text: data[counter].ru,
+            voice: window.speechSynthesis.getVoices()[27]
+          });*/
+        }
+      }
+    }
+  );
+  /*const data_ = [
+        {
       en: "implicit",
       ru: "скрытый"
     },
     {
       en: "explicit",
       ru: "явный"
-    },
-    {
-      en: "typecasting",
-      ru: "приведение типов"
-    },
-    {
-      en: "coertion",
-      ru: "принуждение"
-    },
-    {
-      en: "approximate",
-      ru: "приблизительный"
-    },
-    {
-      en: "hurdle",
-      ru: "препятствие"
     }
-  ];
+  ];*/
 
   useEffect(() => {
     //speak({ text: value, lang: "ru-RU" });
     console.log("hi");
     //console.log(window.speechSynthesis.getVoices());
-    fetch("https://jsonblob.com/api/jsonBlob/885082437441568768")
+    /*fetch("https://jsonblob.com/api/jsonBlob/885082437441568768")
       .then((res) => res.json())
-      .then(setData);
+      .then(setData);*/
     //.then(console.log(data));
+    fetchNewDict("885082437441568768");
+    //885129898419830784
 
     return function cleanup() {};
   }, []);
@@ -99,7 +97,7 @@ export default function App() {
     }
   }, 1500);
 
-  useEffect(() => {
+  /*useEffect(() => {
     //speak({ text: data[counter].en, lang: "ru-RU" });
     if (data) {
       if (counterLang == 0) {
@@ -111,11 +109,53 @@ export default function App() {
         });
       }
     }
-  }, [counterLang]);
+  }, [counterLang]);*/
+
+  function onNewDictLoaded(data) {
+    console.log("data", data);
+    setData(data);
+    setCounter(0);
+    setCounterLang(0);
+  }
+
+  function fetchNewDict(jsonblobnum) {
+    fetch("https://jsonblob.com/api/jsonBlob/" + jsonblobnum)
+      .then((res) => res.json())
+      //.then(setData);
+      .then((res) => onNewDictLoaded(res));
+  }
+
+  function pasteNewDict(jsondata) {
+    console.log("jsondata", jsondata);
+    setData(JSON.parse(jsondata));
+  }
+
+  //function inputChange(val) {}
 
   return (
     <div className="App">
       <h1>Hello English {counter}</h1>
+      <h1> The count is: {count}</h1>
+      <button onClick={() => dispatch(increment())}>increment</button>
+      <button onClick={() => dispatch(decrement())}>decrement</button>
+      <button onClick={() => dispatch(incrementByAmount(33))}>33</button>
+      <button onClick={setToggleExpandHelp}>expand</button>
+      <div className={`expandableHelp ${toggleExpandHelp ? "hidden" : ""}`}>
+        <ul>
+          <li>Export table from google sheets as CSV</li>
+          <li>
+            Convert to JSON on{" "}
+            <a href="https://csvjson.com/csv2json">csvjson.com/csv2json</a>
+          </li>
+          <li>
+            Paste JSON to <a href="https://jsonblob.com/">jsonblob.com</a> and
+            save
+          </li>
+          <li>Paste blob number from the URL here:</li>
+        </ul>
+        <input onChange={(event) => fetchNewDict(event.target.value)} />
+        <textarea onChange={(event) => pasteNewDict(event.target.value)} />
+      </div>
       <table>
         <tbody>
           {data?.map((el, index) => (

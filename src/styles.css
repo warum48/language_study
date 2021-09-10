@@ -1,3 +1,7 @@
+html,
+body {
+  min-height: 100%;
+}
 body {
   background: #cb184e;
   background: -webkit-linear-gradient(top left, #cb184e, #171141);
@@ -19,9 +23,25 @@ td {
   padding: 1rem 1.2rem;
   border-radius: 6px;
   border: 1px solid red;
-  background-color: white;
+  background-color: rgb(70, 59, 139, 0.3);
+  color: white;
 }
 
 td.active {
   background-color: lightpink;
+  color: black;
+}
+
+.expandableHelp {
+  margin: 1rem 50px;
+  background-color: rgba(252, 143, 243, 0.5);
+  padding: 20px;
+  transition: 0.2s ease-out;
+  text-align: left;
+}
+
+.expandableHelp.hidden {
+  max-height: 0;
+  padding: 0;
+  overflow: hidden;
 }

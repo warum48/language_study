@@ -5,12 +5,16 @@
   "keywords": [],
   "main": "src/index.js",
   "dependencies": {
+    "@reduxjs/toolkit": "1.6.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-redux": "7.2.5",
     "react-say": "2.0.1",
     "react-scripts": "4.0.0",
     "react-speech": "1.0.2",
     "react-speech-kit": "3.0.1",
+    "react-use": "17.3.1",
+    "redux-persist": "6.0.0",
     "use-state-with-callback": "2.0.3"
   },
   "devDependencies": {
