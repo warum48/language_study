@@ -8,6 +8,7 @@ import useStateWithCallback from "use-state-with-callback";
 import { useToggle } from "react-use";
 import { useSelector, useDispatch } from "react-redux";
 import { decrement, increment, incrementByAmount } from "./redux/counter";
+import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -134,52 +135,58 @@ export default function App() {
 
   return (
     <div className="App">
-      <h1>Hello English {counter}</h1>
-      <h1> The count is: {count}</h1>
+      <header>
+        <h1>Hello English {counter}</h1>
+      </header>
+      {/*<h1> The count is: {count}</h1>
       <button onClick={() => dispatch(increment())}>increment</button>
       <button onClick={() => dispatch(decrement())}>decrement</button>
       <button onClick={() => dispatch(incrementByAmount(33))}>33</button>
-      <button onClick={setToggleExpandHelp}>expand</button>
-      <div className={`expandableHelp ${toggleExpandHelp ? "hidden" : ""}`}>
-        <ul>
-          <li>Export table from google sheets as CSV</li>
-          <li>
-            Convert to JSON on{" "}
-            <a href="https://csvjson.com/csv2json">csvjson.com/csv2json</a>
-          </li>
-          <li>
-            Paste JSON to <a href="https://jsonblob.com/">jsonblob.com</a> and
-            save
-          </li>
-          <li>Paste blob number from the URL here:</li>
-        </ul>
-        <input onChange={(event) => fetchNewDict(event.target.value)} />
-        <textarea onChange={(event) => pasteNewDict(event.target.value)} />
+  */}
+      <div class="gridcont">
+        <div class="settings">
+          <div class="infohead">
+            <h3>How to paste dictonary</h3>
+            {/*<button onClick={setToggleExpandHelp}>expand</button>*/}
+            <div class="icon">
+              <AiFillCaretDown onClick={setToggleExpandHelp} />
+            </div>
+          </div>
+
+          <div className={`expandableHelp ${toggleExpandHelp ? "hidden" : ""}`}>
+            <ul>
+              <li>Export table from google sheets as CSV</li>
+              <li>
+                Convert to JSON on
+                <a href="https://csvjson.com/csv2json">csvjson.com/csv2json</a>
+              </li>
+              <li>
+                Paste JSON to <a href="https://jsonblob.com/">jsonblob.com</a>{" "}
+                and save
+              </li>
+              <li>Paste blob number from the URL here:</li>
+            </ul>
+            {/*
+            <input onChange={(event) => fetchNewDict(event.target.value)} />*/}
+            <textarea
+              onChange={(event) => pasteNewDict(event.target.value)}
+              placeholder="paste dict here"
+            />
+          </div>
+        </div>
+        <div class="langtab">
+          <table>
+            <tbody>
+              {data?.map((el, index) => (
+                <tr key={index}>
+                  <td className={index == counter ? "active" : ""}>{el.en}</td>
+                  <td>{el.ru}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-      <table>
-        <tbody>
-          {data?.map((el, index) => (
-            <tr key={index}>
-              <td className={index == counter ? "active" : ""}>{el.en}</td>
-              <td>{el.ru}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      {/*<Speech text="Welcome to react speech" />
-      <h2>Start editing to see some magdfic happen!</h2>
-      <Say
-        speak="A quick brown fox jumped over the lazy dogs."
-        voice={selector}
-        text="lala"
-      />
-      <SayButton
-        onClick={(event) => console.log(event)}
-        text="kokoko"
-        speak="A quick brown fox jumped over the lazy dogs."
-      >
-        Tell me a story
-  </SayButton>*/}
     </div>
   );
 }
