@@ -1,5 +1,6 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import counterReducer from "./counter";
+import dictsReducer from "./dictionaries";
 
 import {
   persistStore,
@@ -20,7 +21,8 @@ const persistConfig = {
 };
 
 const reducers = combineReducers({
-  counter: counterReducer
+  counter: counterReducer,
+  mdicts: dictsReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

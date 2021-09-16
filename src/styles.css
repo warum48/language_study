@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200;1,100&display=swap");
 :root {
   --info-color: #fff8f2c5;
 }
@@ -7,6 +7,7 @@ html,
 body {
   min-height: 100%;
   margin: 0;
+  color: white;
 }
 body {
   background: #cb184e;
@@ -17,9 +18,14 @@ body {
 .App {
   font-family: sans-serif;
   text-align: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 header {
   padding: 15px;
+  display: flex;
+  align-items: baseline;
 }
 h1,
 h2,
@@ -34,10 +40,15 @@ h1 {
 h3 {
   font-size: 1.2rem;
 }
+.quote {
+  font-style: italic;
+  font-family: "Montserrat", sans-serif;
+  margin-left: 20px;
+}
 
 .infohead {
   display: flex;
-  margin-left: 10px;
+  margin-left: 25px;
   /*justify-content: space-between;*/
 }
 .infohead .icon {
@@ -90,9 +101,10 @@ td.active {
   transition: 0.2s ease-out;
   text-align: left;
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-left: 25px;
+  margin-right: 25px;
   margin-top: -7px;
+  color: black;
 }
 
 .expandableHelp.hidden {

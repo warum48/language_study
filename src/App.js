@@ -8,7 +8,13 @@ import useStateWithCallback from "use-state-with-callback";
 import { useToggle } from "react-use";
 import { useSelector, useDispatch } from "react-redux";
 import { decrement, increment, incrementByAmount } from "./redux/counter";
+import { addDict, deleteAllDicts, deleteDictNum } from "./redux/dictionaries";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
+import { IconContext } from "react-icons";
+import { ImBubbles3 } from "react-icons/im";
+import ReactJson from "react-json-view";
+
+import Infohead from "./ui/Infohead";
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -28,8 +34,10 @@ function useInterval(callback, delay) {
 }
 
 export default function App() {
+  const inputArea = useRef(null);
   //const count= useSelector((state) => state.counter.counter); //test redux
   const { count } = useSelector((state) => state.counter);
+  const mydicts = useSelector((state) => state.mdicts.dicts);
   const dispatch = useDispatch();
   /*const selector = useCallback(
     (voices) => [...voices].find((v) => v.lang === "zh-HK"),
@@ -136,22 +144,34 @@ export default function App() {
   return (
     <div className="App">
       <header>
-        <h1>Hello English {counter}</h1>
+        <IconContext.Provider
+          value={{
+            color: "white",
+            size: "2.5em",
+            className: "global-class-name"
+          }}
+        >
+          <ImBubbles3 onClick={setToggleExpandHelp} />
+        </IconContext.Provider>{" "}
+        &nbsp;&nbsp;&nbsp;
+        <h1>Hello English </h1>
+        <div className="quote">Repetition is the key to learning</div>
       </header>
-      {/*<h1> The count is: {count}</h1>
+      {/*<
+      
+      {counter}
+      
+      h1> The count is: {count}</h1>
       <button onClick={() => dispatch(increment())}>increment</button>
       <button onClick={() => dispatch(decrement())}>decrement</button>
       <button onClick={() => dispatch(incrementByAmount(33))}>33</button>
   */}
-      <div class="gridcont">
-        <div class="settings">
-          <div class="infohead">
-            <h3>How to paste dictonary</h3>
-            {/*<button onClick={setToggleExpandHelp}>expand</button>*/}
-            <div class="icon">
-              <AiFillCaretDown onClick={setToggleExpandHelp} />
-            </div>
-          </div>
+      <div className="gridcont">
+        <div className="settings">
+          <Infohead
+            text="How to paste dictonary"
+            clickfunc={setToggleExpandHelp}
+          />
 
           <div className={`expandableHelp ${toggleExpandHelp ? "hidden" : ""}`}>
             <ul>
@@ -169,12 +189,42 @@ export default function App() {
             {/*
             <input onChange={(event) => fetchNewDict(event.target.value)} />*/}
             <textarea
-              onChange={(event) => pasteNewDict(event.target.value)}
+              ref={inputArea}
+              //onChange={(event) => pasteNewDict(event.target.value)}
               placeholder="paste dict here"
             />
+            <button
+              onClick={() =>
+                dispatch(
+                  addDict({
+                    date: new Date()
+                      .toISOString()
+                      .slice(0, 19)
+                      .split("T")
+                      .join("_"),
+                    dict: JSON.parse(inputArea.current.value)
+                  })
+                )
+              }
+            >
+              add dict
+            </button>
+            <button onClick={() => dispatch(deleteAllDicts())}>
+              delete all
+            </button>
+            <button onClick={() => dispatch(deleteDictNum(1))}>
+              delete by num
+            </button>
+            <ReactJson src={mydicts[0]} />
           </div>
+
+          <Infohead text="My dictionaries" clickfunc={setToggleExpandHelp} />
+          {/*mydicts*/}
+          {mydicts.map((el, index) => (
+            <div key={index}>{el.date}</div>
+          ))}
         </div>
-        <div class="langtab">
+        <div className="langtab">
           <table>
             <tbody>
               {data?.map((el, index) => (
@@ -185,6 +235,7 @@ export default function App() {
               ))}
             </tbody>
           </table>
+          {counter}
         </div>
       </div>
     </div>
