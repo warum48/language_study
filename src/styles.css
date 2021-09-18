@@ -74,6 +74,8 @@ textarea {
 }
 .langtab {
   background-color: #17104227;
+  max-height:100vh;
+  overflow: scroll;
 }
 h1 {
   color: white;

@@ -9,10 +9,11 @@ import { useToggle } from "react-use";
 import { useSelector, useDispatch } from "react-redux";
 import { decrement, increment, incrementByAmount } from "./redux/counter";
 import { addDict, deleteAllDicts, deleteDictNum } from "./redux/dictionaries";
-import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
+//import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 import { IconContext } from "react-icons";
 import { ImBubbles3 } from "react-icons/im";
 import ReactJson from "react-json-view";
+import useDynamicRefs from "use-dynamic-refs";
 
 import Infohead from "./ui/Infohead";
 
@@ -44,27 +45,29 @@ export default function App() {
     []
   );*/
   const [counter, setCounter] = useState(0);
-  //const [counterLang, setCounterLang] = useState(0);
+  const [counterLang, setCounterLang] = useState(0);
   //const [value, setValue] = useState("test speach");
   const { speak } = useSpeechSynthesis();
   const [toggleExpandHelp, setToggleExpandHelp] = useToggle();
   const [data, setData] = useState(null); //mod
+  const [getRef, setRef] = useDynamicRefs();
 
-  const [counterLang, setCounterLang] = useStateWithCallback(
+  /*const [counterLang, setCounterLang] = useStateWithCallback(
     0,
     (counterLang) => {
       if (data) {
         if (counterLang == 0) {
-          //speak({ text: data[counter].en, lang: "ru-RU" });
+          console.log("sp");
+          speak({ text: data[counter].en, lang: "ru-RU" });
         } else {
-          /*speak({
+          speak({
             text: data[counter].ru,
             voice: window.speechSynthesis.getVoices()[27]
-          });*/
+          });
         }
       }
     }
-  );
+  );*/
   /*const data_ = [
         {
       en: "implicit",
@@ -84,14 +87,14 @@ export default function App() {
       .then((res) => res.json())
       .then(setData);*/
     //.then(console.log(data));
-    fetchNewDict("885082437441568768");
+    fetchNewDict("888656802447900672"); //"885082437441568768");
     //885129898419830784
 
     return function cleanup() {};
   }, []);
 
   useInterval(() => {
-    //console.log("data", data);
+    console.log("data", data);
     if (data) {
       if (counterLang == 0) {
         setCounterLang(counterLang + 1);
@@ -106,9 +109,17 @@ export default function App() {
     }
   }, 1500);
 
-  /*useEffect(() => {
+  useEffect(() => {
     //speak({ text: data[counter].en, lang: "ru-RU" });
     if (data) {
+      getRef("tr" + counter).current.scrollIntoView({
+        behavior: "instant",
+        block: "center",
+        behavior: "smooth"
+        //block: "nearest"
+        //block: "nearest",
+        //inline: "nearest"
+      });
       if (counterLang == 0) {
         speak({ text: data[counter].en, lang: "ru-RU" });
       } else {
@@ -118,7 +129,7 @@ export default function App() {
         });
       }
     }
-  }, [counterLang]);*/
+  }, [counterLang]);
 
   function onNewDictLoaded(data) {
     console.log("data", data);
@@ -228,7 +239,8 @@ export default function App() {
           <table>
             <tbody>
               {data?.map((el, index) => (
-                <tr key={index}>
+                <tr key={index} ref={setRef("tr" + index)}>
+                  <td>{index}</td>
                   <td className={index == counter ? "active" : ""}>{el.en}</td>
                   <td>{el.ru}</td>
                 </tr>
@@ -243,3 +255,4 @@ export default function App() {
 }
 
 //https://www.robinwieruch.de/react-usestate-callback
+//https://stackoverflow.com/questions/55995760/how-to-add-refs-dynamically-with-react-hooks
